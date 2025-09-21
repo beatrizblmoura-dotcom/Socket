@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
         // enviar para servidor
         write(sockfd, buffer, strlen(buffer));
 
-        // se for QUIT, não espera resposta
+        // se for QUIT não espera resposta
         if (strncasecmp(buffer, "QUIT", 4) == 0) {
             printf("Encerrando cliente...\n");
             break;
