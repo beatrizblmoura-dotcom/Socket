@@ -6,11 +6,10 @@
 #include <ctype.h>
 #include <errno.h>
 #include <signal.h>
-#include <sys/wait.h> // Para waitpid
-
+#include <sys/wait.h> // para waitpid
 #include "../include/proto.h"
 
-// Variável global para controlar o loop principal do servidor
+// variavel global para controlar o loop principal do servidor
 volatile sig_atomic_t stop_server = 0;
 
 void handle_sigint(int sig) {
@@ -38,7 +37,7 @@ void process_request(const char *request, char *response) {
     double a, b, result;
     char extra;
 
-    // --- Tentativa 1: Parse do formato PREFIXO (OP A B) ---
+    // --- tentativa 1: parse do formato PREFIXO (OP A B) ---
     int n_prefix = sscanf(request, "%15s %lf %lf %c", op_str, &a, &b, &extra);
     if (n_prefix == 3) { // Parse prefixo bem-sucedido
         if (strcasecmp(op_str, "ADD") == 0) {
@@ -63,9 +62,9 @@ void process_request(const char *request, char *response) {
         return;
     }
 
-    // --- Tentativa 2: Parse do formato INFIXO (A <op> B) ---
+    // --- tentativa 2: parse do formato INFIXO (A <op> B) ---
     int n_infix = sscanf(request, "%lf %c %lf %c", &a, &op_char, &b, &extra);
-    if (n_infix == 3) { // Parse infixo bem-sucedido
+    if (n_infix == 3) { // parse infixo bem-sucedido
         switch (op_char) {
             case '+':
                 result = a + b;
@@ -94,7 +93,7 @@ void process_request(const char *request, char *response) {
         return;
     }
 
-    // --- Se ambos os parses falharem, é uma entrada inválida ---
+    // --- se ambos os parses falharem, eh uma entrada invalida ---
     sprintf(response, "ERR EINV entrada_invalida\n");
 }
 
@@ -135,7 +134,7 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-    printf("Servidor rodando na porta %d...\n", port);
+    printf("servidor rodando na porta %d...\n", port);
 
     while (!stop_server) {
         struct sockaddr_in client_addr;
@@ -143,7 +142,7 @@ int main(int argc, char *argv[]) {
 
         int client_fd = accept(server_fd, (struct sockaddr*)&client_addr, &client_len);
         if (client_fd < 0) {
-            // Se o accept for interrompido por um sinal (como nosso SIGCHLD), apenas continue
+            // se o accept for interrompido por um sinal (como nosso SIGCHLD), apenas continue
             if (errno == EINTR) {
                 continue;
             }
@@ -151,28 +150,28 @@ int main(int argc, char *argv[]) {
             continue;
         }
 
-        // Fork para criar um processo filho que cuidará do cliente
+        // fork para criar um processo filho que cuidara do cliente
         pid_t pid = fork();
 
         if (pid < 0) {
             perror("fork");
             close(client_fd);
-            continue; // Pai continua a aceitar outros clientes
+            continue; // pai continua a aceitar outros clientes
         }
 
-        if (pid == 0) { // --- Processo Filho ---
-            // O filho não precisa do socket de escuta do servidor
+        if (pid == 0) { // --- processo Filho ---
+            // o filho nao precisa do socket de escuta do servidor
             close(server_fd);
 
-            printf("Filho (PID %d) cuidando do cliente: %s:%d\n",
+            printf("filho (PID %d) cuidando do cliente: %s:%d\n",
                 getpid(), inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
 
-            // Lógica de comunicação com o cliente (seu código original)
+            // logica de comunicação com o cliente (seu codigo original)
             FILE *fp = fdopen(client_fd, "r+");
             if (fp == NULL) {
                 perror("fdopen");
                 close(client_fd);
-                exit(1); // Encerra o processo filho em caso de erro
+                exit(1); // encerra o processo filho em caso de erro
             }
 
             char line[BUFFER_SIZE];
@@ -188,39 +187,39 @@ int main(int argc, char *argv[]) {
                     break;
                 }
                 
-                // --- BÔNUS: Comandos HELP e VERSION ---
+                // --- BONUS: Comandos HELP e VERSION ---
                 if (strcasecmp(line, "HELP") == 0) {
                     fprintf(fp, "OK Comandos: ADD|SUB|MUL|DIV A B | A op B | HELP | VERSION | QUIT\n");
                     fflush(fp);
-                    continue; // Pula para a próxima iteração
+                    continue; // pula para a proxima iteracao
                 }
                 if (strcasecmp(line, "VERSION") == 0) {
                     fprintf(fp, "OK Calculadora Server v1.1 (Concorrente)\n");
                     fflush(fp);
-                    continue; // Pula para a próxima iteração
+                    continue; // pula para a proxima iteracao
                 }
 
-                // Se não for um comando simples, processa a operação matemática
+                // se nao for um comando simples, processa a operação matematica
                 process_request(line, response);
                 fprintf(fp, "%s", response);
                 fflush(fp);
             }
 
-            fclose(fp); // Isso também fecha client_fd
-            printf("Filho (PID %d) encerrou a conexão.\n", getpid());
+            fclose(fp); // isso tambem fecha client_fd
+            printf("filho (PID %d) encerrou a conexao.\n", getpid());
             exit(0); // IMPORTANTE: O filho termina seu trabalho e sai
 
-        } else { // --- Processo Pai ---
-            // O pai não precisa do socket de comunicação do cliente
+        } else { // --- processo Pai ---
+            // o pai nao precisa do socket de comunicacao do cliente
             close(client_fd);
-            printf("Pai delegou cliente para o filho (PID %d).\n", pid);
-            // O pai volta imediatamente para o início do loop e chama accept() novamente
+            printf("pai delegou cliente para o filho (PID %d).\n", pid);
+            // o pai volta imediatamente para o início do loop e chama accept() novamente
         }
-                printf("Cliente desconectado.\n");
-                // volta para aceitar próximo cliente (single-client-at-a-time)
+                printf("cliente desconectado.\n");
+                // volta para aceitar proximo cliente (single-client-at-a-time)
     }
 
-    printf("Servidor encerrado.\n");
+    printf("servidor encerrado.\n");
     close(server_fd);
     return 0;
 }
