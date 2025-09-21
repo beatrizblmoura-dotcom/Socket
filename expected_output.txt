@@ -1,0 +1,16 @@
+Conectado ao servidor 127.0.0.1:5055
+Digite operações (ex: ADD 10 2) ou QUIT para sair.
+> OK 12.000000
+> OK 13.000000
+> OK -5.000000
+> OK -3.000000
+> OK 7.000000
+> OK -7.500000
+> OK 2.500000
+> ERR EZDV divisao_por_zero
+> OK 2.000000
+> OK Comandos: ADD|SUB|MUL|DIV A B | A op B | HELP | VERSION | QUIT
+> OK Calculadora Server v1.1 (Concorrente)
+> ERR EINV entrada_invalida
+> ERR EINV entrada_invalida
+> Encerrando cliente...
