@@ -1,4 +1,3 @@
-#!/bin/bash
 # script de teste automatizado para a Calculadora Cliente/Servidor
 PORT=5055
 SERVER_EXE="./server"
@@ -63,4 +62,5 @@ else
 fi
 tests.sh
 Displaying tests.sh.
+
 
