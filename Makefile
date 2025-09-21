@@ -1,58 +1,59 @@
-# Makefile para a Calculadora Cliente-Servidor
+# makefile para a Calculadora Cliente-Servidor
 
-# Compilador
+# compilador
 CC = gcc
 # Flags de compilação: -I para diretórios de include, -g para debug, -Wall para avisos
 CFLAGS = -Iinclude -g -Wall
 # Flags de linkagem (se necessário)
 LDFLAGS =
 
-# Diretórios
+# diretorios
 SRCDIR = src
 INCDIR = include
 BUILDDIR = build
 
-# Arquivos fonte
+# arquivos fonte
 CLIENT_SRC = $(SRCDIR)/client.c
 SERVER_SRC = $(SRCDIR)/server.c
 
-# Arquivos objeto
+# arquivos objeto
 CLIENT_OBJ = $(BUILDDIR)/client.o
 SERVER_OBJ = $(BUILDDIR)/server.o
 
-# Alvos (executáveis)
+# alvos (executáveis)
 CLIENT_EXE = client
 SERVER_EXE = server
 
-# Target principal: compila tudo
+# target principal: compila tudo
 all: $(CLIENT_EXE) $(SERVER_EXE)
 
-# Target para compilar o servidor
+# target para compilar o servidor
 $(SERVER_EXE): $(SERVER_OBJ)
 	@echo "Linkando o executável do servidor..."
 	@$(CC) $(LDFLAGS) $^ -o $@
 
-# Target para compilar o cliente
+# target para compilar o cliente
 $(CLIENT_EXE): $(CLIENT_OBJ)
 	@echo "Linkando o executável do cliente..."
 	@$(CC) $(LDFLAGS) $^ -o $@
 
-# Regra para compilar arquivos .o a partir de .c
-# Garante que os objetos sejam criados no diretório de build
+# regra para compilar arquivos .o a partir de .c
+# garante que os objetos sejam criados no diretório de build
 $(BUILDDIR)/%.o: $(SRCDIR)/%.c
 	@mkdir -p $(BUILDDIR)
 	@echo "Compilando $< -> $@..."
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-# Target para limpar os arquivos gerados (objetos e executáveis)
+# target para limpar os arquivos gerados (objetos e executáveis)
 clean:
 	@echo "Limpando arquivos de build..."
 	@rm -f $(CLIENT_EXE) $(SERVER_EXE) $(BUILDDIR)/*.o
 	@rmdir $(BUILDDIR) 2>/dev/null || true
 
-# Targets "phony" para evitar conflitos com nomes de arquivos
+# targets "phony" para evitar conflitos com nomes de arquivos
 .PHONY: all clean server client
 
 # Mapeia os nomes "server" e "client" para seus executáveis
 server: $(SERVER_EXE)
 client: $(CLIENT_EXE)
+
