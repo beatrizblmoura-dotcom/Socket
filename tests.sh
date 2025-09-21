@@ -13,7 +13,7 @@ NC='\033[0m' # No Color
 echo "Iniciando o servidor na porta $PORT em segundo plano..."
 $SERVER_EXE $PORT &
 SERVER_PID=$!
-# pequena pausa para garantir que o servidor esteja pronto para aceitar conexões
+# pequena pausa para garantir que o servidor esteja pronto para aceitar conexoes
 sleep 1
 
 # verifica se o servidor realmente iniciou
@@ -24,8 +24,8 @@ fi
 
 echo "Servidor iniciado com PID $SERVER_PID. Executando testes..."
 
-# executa o cliente com uma série de comandos via 'here document'
-# a saída do cliente (stdout e stderr) é redirecionada para o arquivo de saída do teste
+# executa o cliente com uma serie de comandos via 'here document'
+# a saida do cliente (stdout e stderr) é redirecionada para o arquivo de saida do teste
 $CLIENT_EXE 127.0.0.1 $PORT > $TEST_OUTPUT_FILE 2>&1 <<EOF
 ADD 10 2
 10.5 + 2.5
@@ -45,7 +45,7 @@ EOF
 
 echo "Testes finalizados. Encerrando o servidor..."
 kill $SERVER_PID
-# Espera o servidor terminar completamente
+# espera o servidor terminar completamente
 wait $SERVER_PID 2>/dev/null
 
 echo "Comparando a saída com o resultado esperado..."
@@ -62,5 +62,6 @@ else
 fi
 tests.sh
 Displaying tests.sh.
+
 
 
