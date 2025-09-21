@@ -3,7 +3,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>
-
 #include "../include/proto.h"
 
 int main(int argc, char *argv[]) {
