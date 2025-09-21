@@ -18,8 +18,8 @@ void handle_sigint(int sig) {
 }
 
 void handle_sigchld(int sig) {
-    // waitpid() em um loop para limpar todos os filhos que terminaram.
-    // WNOHANG garante que a chamada não bloqueie se não houver filhos para limpar.
+    // waitpid() em um loop para limpar todos os filhos que terminaram
+    // WNOHANG garante que a chamada não bloqueie se não houver filhos para limpar
     while (waitpid(-1, NULL, WNOHANG) > 0);
 }
 
