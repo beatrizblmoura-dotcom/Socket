@@ -2,7 +2,7 @@
 
 # compilador
 CC = gcc
-# Flags de compilação: -I para diretórios de include, -g para debug, -Wall para avisos
+# flags de compilação: -I para diretórios de include, -g para debug, -Wall para avisos
 CFLAGS = -Iinclude -g -Wall
 # Flags de linkagem (se necessário)
 LDFLAGS =
@@ -56,4 +56,5 @@ clean:
 # Mapeia os nomes "server" e "client" para seus executáveis
 server: $(SERVER_EXE)
 client: $(CLIENT_EXE)
+
 
