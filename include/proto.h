@@ -1,7 +1,7 @@
 #ifndef PROTO_H
 #define PROTO_H
 
-// Porta TCP padrao para o servidor da calculadora
+// porta TCP padrao para o servidor da calculadora
 #define DEFAULT_PORT 5050
 
 // tamanho maximo do buffer para leitura de mensagens
