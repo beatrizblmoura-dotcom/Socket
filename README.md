@@ -1,5 +1,8 @@
 # Calculadora Concorrente Cliente-Servidor em C
 
+**Beatriz Lima de Moura - 10416616
+Giovana Simões Franco - 10417646**
+
 Este projeto implementa uma aplicação cliente-servidor em **C** utilizando **sockets TCP/IPv4**.  
 O servidor é capaz de processar operações matemáticas básicas enviadas por múltiplos clientes simultaneamente, retornando os resultados em tempo real.
 
